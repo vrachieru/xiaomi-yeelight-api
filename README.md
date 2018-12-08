@@ -20,6 +20,8 @@
 
 * Query device information
 * Change bulb state
+* Set RGB color
+* Set custom flow
 
 ## Install
 
@@ -70,6 +72,34 @@ Bulb powered off
 
 $ python3 toggle.py
 Bulb powered on
+```
+
+### Set custom flow
+
+The following will transition between the colors `RED`, `GREEN`, `BLUE` at `100%` brightness with a transition duration of `1s` and `1s` delay between transitions.
+
+```python
+from yeelight import SmartBulb, Flow, RGBTransition, SleepTransition
+
+RED   = [255, 0, 0]
+GREEN = [0, 255, 0]
+BLUE  = [0, 0, 255]
+
+flow = Flow(
+    10,
+    Flow.actions.recover,
+    [
+        RGBTransition(*RED, 1000, 100),
+        SleepTransition(1000),
+        RGBTransition(*GREEN, 1000, 100),
+        SleepTransition(1000),
+        RGBTransition(*BLUE, 1000, 100),
+        SleepTransition(1000)
+    ]
+)
+
+bulb = SmartBulb('192.168.xxx.xxxx')
+bulb.start_flow(flow)
 ```
 
 ## License
