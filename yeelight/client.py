@@ -1,6 +1,9 @@
 import json
 import socket
 
+from .flow import *
+from .util import *
+
 class SmartBulb(object):
 
     def __init__(self, host, port=55443, timeout=5):
@@ -137,3 +140,20 @@ class SmartBulb(object):
         blue = clamp(blue, 0, 255)
 
         self.send_command('set_rgb', [red * 65536 + green * 256 + blue])
+
+    def start_flow(self, flow):
+        '''
+        Start a flow
+        
+        :param yeelight.Flow flow: the Flow instance to start
+        '''
+        if not isinstance(flow, Flow):
+            raise ValueError('Argument is not a Flow instance')
+
+        self.send_command('start_cf', [flow.count * len(flow.transitions), flow.action.value, flow.expression])
+
+    def stop_flow(self):
+        '''
+        Stop a flow
+        '''
+        self.send_command('stop_cf', [])
