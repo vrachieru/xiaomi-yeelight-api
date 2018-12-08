@@ -123,3 +123,17 @@ class SmartBulb(object):
         Turn the bulb off
         '''
         self.send_command('set_power', ['off'])
+
+    def set_rgb(self, red, green, blue):
+        '''
+        Set the bulb's RGB value
+
+        :param int red: the red value to set (0-255)
+        :param int green: the green value to set (0-255)
+        :param int blue: the blue value to set (0-255)
+        '''
+        red = clamp(red, 0, 255)
+        green = clamp(green, 0, 255)
+        blue = clamp(blue, 0, 255)
+
+        self.send_command('set_rgb', [red * 65536 + green * 256 + blue])
